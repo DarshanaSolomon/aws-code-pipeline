@@ -1,0 +1,23 @@
+version: 0.2
+phases:
+  pre_build:
+    commands:
+    - IMAGE_URI=${REPOSITORY_URI}:latest
+  build:
+    commands:
+    - echo Build started on `date`
+    - echo $IMAGE_URI
+    - mvn clean install
+    - docker build --tag $IMAGE_URI .
+  post_build:
+    commands:
+    - printenv
+    - echo Build completed on `date`
+    - echo $(docker images)
+    - echo Pushing docker image
+    - docker login --username=solomandarshana --password=Dd951753!
+    - docker push $IMAGE_URI
+    - echo push completed
+artifacts:
+  files:
+  - Dockerrun.aws.json
